@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=ru.fractals.FractalsBuilder
+Exec=/usr/bin/ru.fractals.FractalsBuilder
+Name=FractalsBuilder
+Name[ru]=Конструктор фракталов
+
+[X-Application]
+Permissions=PushNotifications;DeviceInfo;Audio;Camera;Internet;UserDirs
+OrganizationName=ru.fractals
+ApplicationName=FractalsBuilder
+ExecDBus=/usr/bin/ru.fractals.FractalsBuilder
