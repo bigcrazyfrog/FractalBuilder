@@ -13,6 +13,7 @@ HEADERS += \
 DISTFILES += \
     qml/pages/BasePage.qml \
     qml/pages/Mandelbrot.qml \
+    qml/pages/fractals/Julia.qml \
     rpm/ru.fractals.FractalsBuilder.spec \
 
 AURORAAPP_ICONS = 86x86 108x108 128x128 172x172
