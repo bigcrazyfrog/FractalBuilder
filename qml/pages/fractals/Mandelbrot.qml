@@ -243,7 +243,35 @@ Page {
                 height: Theme.paddingLarge
             }
 
+            Component {
+                id: folderPickerDialog
+                FolderPickerDialog {
+                    onAccepted: {
+                        savePath = selectedPath
 
+                        var filename = "Mandelbrot_" + new Date().toISOString().replace(/[:.]/g, "-") + ".png"
+                        var fullPath = savePath + "/" + filename
+
+                        console.log("Сохраняем в:", fullPath)
+
+                        canvas.grabToImage(function(result) {
+                            if (result.saveToFile(fullPath)) {
+                                console.log("Успешно сохранено:", fullPath)
+                            } else {
+                                console.log("Ошибка сохранения в:", fullPath)
+                            }
+                        })
+                    }
+                }
+            }
+
+            Button {
+                text: "Сохранить как фото"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: {
+                    pageStack.push(folderPickerDialog)
+                }
+            }
         }
     }
 }
