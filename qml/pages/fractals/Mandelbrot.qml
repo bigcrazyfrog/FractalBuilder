@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import QtQuick.Layouts 1.1
 import "js/mandelbrot.js" as Mandelbrot
 
 Page {
@@ -14,7 +15,7 @@ Page {
     property real zoom: 1.0
     property int renderTime: 0
     property bool autoUpdate: true
-    property string savePath: ""  // Добавьте эту строку
+    property string savePath: ""
 
 
     SilicaFlickable {
@@ -30,10 +31,37 @@ Page {
                 title: "Mandelbrot Fractal"
             }
 
-            Button {
-                text: "Построить фрактал"
+            RowLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: canvas.requestPaint()
+                width: parent.width - 2*Theme.horizontalPageMargin
+                spacing: Theme.paddingMedium
+
+                Button {
+                    text: "-"
+                    Layout.preferredWidth: Theme.itemSizeSmall
+                    onClicked: {
+                        zoom = Math.max(0.2, zoom / 1.3)
+                        zoomField.text = zoom.toFixed(2)
+
+                        if (autoUpdate) canvas.requestPaint()
+                    }
+                }
+
+                Button {
+                    text: "Построить фрактал"
+                    Layout.fillWidth: true
+                    onClicked: canvas.requestPaint()
+                }
+
+                Button {
+                    text: "+"
+                    Layout.preferredWidth: Theme.itemSizeSmall
+                    onClicked: {
+                        zoom = zoom * 1.3
+                        zoomField.text = zoom.toFixed(2)
+                        if (autoUpdate) canvas.requestPaint()
+                    }
+                }
             }
 
             Canvas {
@@ -49,6 +77,47 @@ Page {
                         zoom = Math.min(10, Math.max(0.5, zoom * pinch.scale))
                         zoomField.text = zoom.toFixed(2)
                         if (autoUpdate) canvas.requestPaint()
+                    }
+                }
+
+                MouseArea {
+                    id: dragArea
+                    anchors.fill: parent
+                    drag.target: dragProxy
+                    drag.minimumX: 0
+                    drag.maximumX: parent.width
+                    drag.minimumY: 0
+                    drag.maximumY: parent.height
+
+                    Item { id: dragProxy }
+
+                    onPressed: {
+                        dragProxy.x = mouse.x
+                        dragProxy.y = mouse.y
+                    }
+
+                    onPositionChanged: {
+                        if (drag.active) {
+                            var dx = dragProxy.x - mouse.x
+                            var dy = dragProxy.y - mouse.y
+
+                            var planeWidth = 3.5 / zoom
+                            var planeHeight = 2.0 / zoom
+
+                            var dxPlane = (dx / width) * planeWidth
+                            var dyPlane = (dy / height) * planeHeight
+
+                            centerX += dxPlane
+                            centerY += dyPlane
+
+                            xCenterField.text = centerX.toFixed(4)
+                            yCenterField.text = centerY.toFixed(4)
+
+                            dragProxy.x = mouse.x
+                            dragProxy.y = mouse.y
+
+                            if (autoUpdate) canvas.requestPaint()
+                        }
                     }
                 }
 
@@ -170,32 +239,6 @@ Page {
                     yCenterField.text = "0"
                     zoomField.text = "1.0"
                     if (autoUpdate) canvas.requestPaint()
-                }
-            }
-
-            Button {
-                text: "Сохранить как фото"
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    var dialog = pageStack.push("Sailfish.Silica.FileSaveDialog", {
-                        title: "Сохранить фрактал",
-                        folder: StandardPaths.pictures,
-                        name: "Mandelbrot_" + new Date().toISOString().replace(/[:.]/g, "-") + ".png"
-                    })
-
-                    dialog.accepted.connect(function() {
-                        canvas.grabToImage(function(result) {
-                            if (result.saveToFile(dialog.path)) {
-                                pageStack.push(Qt.resolvedUrl("../Notification.qml"), {
-                                    message: "Сохранено!"
-                                })
-                            } else {
-                                pageStack.push(Qt.resolvedUrl("../Notification.qml"), {
-                                    message: "Ошибка сохранения"
-                                })
-                            }
-                        })
-                    })
                 }
             }
 
