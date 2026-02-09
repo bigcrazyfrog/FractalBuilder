@@ -9,7 +9,7 @@ Page {
     allowedOrientations: Orientation.All
 
     property int maxIter: 50
-    property string colorScheme: "Черно-белая"
+    property string colorScheme: "Нет"
     property real centerX: -0.5
     property real centerY: 0
     property real zoom: 1.0
@@ -152,122 +152,130 @@ Page {
                 }
             }
 
-            ComboBox {
-                id: colorSchemeCombo
-                label: "Тема"
-                currentIndex: 0
-                menu: ContextMenu {
-                    MenuItem { text: "Черно-белая" }
-                    MenuItem { text: "Огонь" }
-                    MenuItem { text: "Океан" }
-                }
-                onCurrentIndexChanged: {
-                    colorScheme = colorSchemeCombo.currentItem.text
-                    if (autoUpdate) canvas.requestPaint()
-                }
-            }
-
-            TextField {
-                id: xCenterField
+            RowLayout {
                 width: parent.width - 2*Theme.horizontalPageMargin
                 anchors.horizontalCenter: parent.horizontalCenter
-                label: "Центр X"
-                text: centerX
-                inputMethodHints: Qt.ImhFormattedNumbersOnly
-                EnterKey.onClicked: {
-                    centerX = parseFloat(text)
-                    if (autoUpdate) canvas.requestPaint()
-                }
-                onTextChanged: {
-                    if (focus === false) {
+                spacing: Theme.paddingMedium
+
+                TextField {
+                    id: xCenterField
+                    Layout.fillWidth: true
+                    label: "Центр X"
+                    text: centerX
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    EnterKey.onClicked: {
                         centerX = parseFloat(text)
                         if (autoUpdate) canvas.requestPaint()
                     }
+                    onTextChanged: {
+                        if (focus === false) {
+                            centerX = parseFloat(text)
+                            if (autoUpdate) canvas.requestPaint()
+                        }
+                    }
                 }
-            }
 
-            TextField {
-                id: yCenterField
-                width: parent.width - 2*Theme.horizontalPageMargin
-                anchors.horizontalCenter: parent.horizontalCenter
-                label: "Центр Y"
-                text: centerY
-                inputMethodHints: Qt.ImhFormattedNumbersOnly
-                EnterKey.onClicked: {
-                    centerY = parseFloat(text)
-                    if (autoUpdate) canvas.requestPaint()
-                }
-                onTextChanged: {
-                    if (focus === false) {
+                TextField {
+                    id: yCenterField
+                    Layout.fillWidth: true
+                    label: "Центр Y"
+                    text: centerY
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    EnterKey.onClicked: {
                         centerY = parseFloat(text)
                         if (autoUpdate) canvas.requestPaint()
                     }
+                    onTextChanged: {
+                        if (focus === false) {
+                            centerY = parseFloat(text)
+                            if (autoUpdate) canvas.requestPaint()
+                        }
+                    }
                 }
-            }
 
-            TextField {
-                id: zoomField
-                width: parent.width - 2*Theme.horizontalPageMargin
-                anchors.horizontalCenter: parent.horizontalCenter
-                label: "Масштаб"
-                text: zoom
-                inputMethodHints: Qt.ImhFormattedNumbersOnly
-                EnterKey.onClicked: {
-                    zoom = parseFloat(text)
-                    if (autoUpdate) canvas.requestPaint()
-                }
-                onTextChanged: {
-                    if (focus === false) {
+                TextField {
+                    id: zoomField
+                    Layout.fillWidth: true
+                    label: "Масштаб"
+                    text: zoom
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    EnterKey.onClicked: {
                         zoom = parseFloat(text)
                         if (autoUpdate) canvas.requestPaint()
+                    }
+                    onTextChanged: {
+                        if (focus === false) {
+                            zoom = parseFloat(text)
+                            if (autoUpdate) canvas.requestPaint()
+                        }
                     }
                 }
             }
 
-            Button {
-                text: "Сбросить настройки"
+            RowLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    maxIter = 50
-                    depthSlider.value = 50
-                    colorScheme = "Черно-белая"
-                    colorSchemeCombo.currentIndex = 0
-                    centerX = -0.5
-                    centerY = 0
-                    zoom = 1.0
-                    xCenterField.text = "-0.5"
-                    yCenterField.text = "0"
-                    zoomField.text = "1.0"
-                    if (autoUpdate) canvas.requestPaint()
+                width: parent.width - 2*Theme.horizontalPageMargin
+                spacing: Theme.paddingMedium
+
+                Button {
+                    text: "Случайный фрактал"
+                    Layout.preferredWidth: parent.width * 0.5
+                    onClicked: {
+                        centerX = (Math.random() * 2 - 1.5).toFixed(2)
+                        centerY = (Math.random() * 1.5 - 0.75).toFixed(2)
+                        zoom = (Math.random() * 3 + 0.5).toFixed(2)
+                        xCenterField.text = centerX
+                        yCenterField.text = centerY
+                        zoomField.text = zoom
+                        if (autoUpdate) canvas.requestPaint()
+                    }
+                }
+
+                Button {
+                    text: "Сохранить как фото"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        pageStack.push(folderPickerDialog)
+                    }
                 }
             }
 
-            Button {
-                text: "Случайный фрактал"
+            RowLayout {
+                width: parent.width - 2*Theme.horizontalPageMargin
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    centerX = (Math.random() * 2 - 1.5).toFixed(2)
-                    centerY = (Math.random() * 1.5 - 0.75).toFixed(2)
-                    zoom = (Math.random() * 3 + 0.5).toFixed(2)
-                    xCenterField.text = centerX
-                    yCenterField.text = centerY
-                    zoomField.text = zoom
-                    if (autoUpdate) canvas.requestPaint()
-                }
-            }
+                spacing: Theme.paddingMedium
+                z: 2
 
-            ComboBox {
-                id: aspectCombo
-                label: "Соотношение сторон"
-                currentIndex: 0
-                menu: ContextMenu {
-                    MenuItem { text: "4:3" }
-                    MenuItem { text: "16:9" }
-                    MenuItem { text: "1:1" }
+                ComboBox {
+                    id: colorSchemeCombo
+                    label: "Тема"
+                    currentIndex: 0
+                    Layout.fillWidth: true
+                    menu: ContextMenu {
+                        MenuItem { text: "Нет" }
+                        MenuItem { text: "Огонь" }
+                        MenuItem { text: "Океан" }
+                    }
+                    onCurrentIndexChanged: {
+                        colorScheme = colorSchemeCombo.currentItem.text
+                        if (autoUpdate) canvas.requestPaint()
+                    }
                 }
-                onCurrentIndexChanged: {
-                    var ratios = [0.75, 0.5625, 1.0]
-                    canvas.height = canvas.width * ratios[currentIndex]
+
+                ComboBox {
+                    id: aspectCombo
+                    label: "Формат"
+                    currentIndex: 0
+                    Layout.fillWidth: true
+                    menu: ContextMenu {
+                        MenuItem { text: "4:3" }
+                        MenuItem { text: "16:9" }
+                        MenuItem { text: "1:1" }
+                    }
+                    onCurrentIndexChanged: {
+                        var ratios = [0.75, 0.5625, 1.0]
+                        canvas.height = canvas.width * ratios[currentIndex]
+                    }
                 }
             }
 
@@ -309,10 +317,20 @@ Page {
             }
 
             Button {
-                text: "Сохранить как фото"
+                text: "Сбросить настройки"
                 anchors.horizontalCenter: parent.horizontalCenter
                 onClicked: {
-                    pageStack.push(folderPickerDialog)
+                    maxIter = 50
+                    depthSlider.value = 50
+                    colorScheme = "Нет"
+                    colorSchemeCombo.currentIndex = 0
+                    centerX = -0.5
+                    centerY = 0
+                    zoom = 1.0
+                    xCenterField.text = "-0.5"
+                    yCenterField.text = "0"
+                    zoomField.text = "1.0"
+                    if (autoUpdate) canvas.requestPaint()
                 }
             }
         }

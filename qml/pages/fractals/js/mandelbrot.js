@@ -1,4 +1,3 @@
-// Mandelbrot.js
 .pragma library
 
 function getColor(iter, maxIter, colorScheme) {
@@ -7,7 +6,7 @@ function getColor(iter, maxIter, colorScheme) {
     var t = iter / maxIter
 
     switch(colorScheme) {
-        case "Черно-белая":
+        case "Нет":
             var brightness = Math.floor(255 * t)
             return "rgb(" + brightness + ", " + brightness + ", " + brightness + ")"
 
