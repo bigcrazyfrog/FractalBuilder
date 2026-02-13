@@ -16,6 +16,19 @@ Page {
             bottomMargin: Theme.paddingLarge
         }
     }
+    // Заголовки
+    Label {
+        font.family: Theme.fontFamilyHeading
+        font.pixelSize: Theme.fontSizeLarge
+        // fontSizeExtraLarge
+    }
+
+    // Обычный текст
+    Label {
+        font.family: Theme.fontFamily
+        font.pixelSize: Theme.fontSizeMedium
+        // fontSizeSmall ExtraSmall
+    }
 
     property string pageTitle: ""
     PageHeader {
