@@ -16,6 +16,7 @@ Page {
             bottomMargin: Theme.paddingLarge
         }
     }
+
     // Заголовки
     Label {
         font.family: Theme.fontFamilyHeading

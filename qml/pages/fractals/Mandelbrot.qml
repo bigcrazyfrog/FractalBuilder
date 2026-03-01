@@ -4,6 +4,7 @@ import Sailfish.Pickers 1.0
 import QtQuick.Layouts 1.1
 
 import "js/mandelbrot.js" as Mandelbrot
+import "js/db.js" as DB
 
 Page {
     id: fractalPage
@@ -18,6 +19,38 @@ Page {
     property bool autoUpdate: true
     property string savePath: ""
 
+    Component.onCompleted: {
+        DB.initDatabase()
+        loadSettings()
+    }
+
+    function loadSettings() {
+        maxIter = parseInt(DB.loadSetting("maxIter", 50))
+        colorScheme = DB.loadSetting("colorScheme", "Черно-белая")
+        centerX = parseFloat(DB.loadSetting("centerX", "-0.5"))
+        centerY = parseFloat(DB.loadSetting("centerY", "0"))
+        zoom = parseFloat(DB.loadSetting("zoom", "1.0"))
+        autoUpdate = DB.loadSetting("autoUpdate", "true") === "true"
+
+        depthSlider.value = maxIter
+        xCenterField.text = centerX
+        yCenterField.text = centerY
+        zoomField.text = zoom
+        autoUpdateSwitch.checked = autoUpdate
+
+        var schemes = ["Нет", "Огонь", "Океан"]
+        colorSchemeCombo.currentIndex = schemes.indexOf(colorScheme)
+        if (colorSchemeCombo.currentIndex < 0) colorSchemeCombo.currentIndex = 0
+    }
+
+    function saveAllSettings() {
+        DB.saveSetting("maxIter", maxIter)
+        DB.saveSetting("colorScheme", colorScheme)
+        DB.saveSetting("centerX", centerX)
+        DB.saveSetting("centerY", centerY)
+        DB.saveSetting("zoom", zoom)
+        DB.saveSetting("autoUpdate", autoUpdate)
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -331,7 +364,25 @@ Page {
                     xCenterField.text = "-0.5"
                     yCenterField.text = "0"
                     zoomField.text = "1.0"
+
+                    console.log("Настройки сброшены")
+
                     if (autoUpdate) canvas.requestPaint()
+                }
+            }
+            Button {
+                text: "Загрузить все настройки"
+                onClicked: {
+                    loadSettings()
+                    console.log("Настройки загружены")
+                    canvas.requestPaint()
+                }
+            }
+            Button {
+                text: "Сохранить все настройки"
+                onClicked: {
+                    saveAllSettings()
+                    console.log("Настройки сохранены")
                 }
             }
         }
