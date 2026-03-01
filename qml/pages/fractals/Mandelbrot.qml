@@ -346,7 +346,7 @@ Page {
             }
 
             Label {
-                text: "Настройки"
+                text: "Конфигурация"
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: Theme.highlightColor
                 font.pixelSize: Theme.fontSizeLarge
@@ -389,7 +389,7 @@ Page {
                 }
 
                 Button {
-                    text: "Сохранить"
+                    text: "<b>Сохранить</b>"
                     Layout.fillWidth: true
                     onClicked: {
                         saveAllSettings()
