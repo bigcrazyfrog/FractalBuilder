@@ -323,11 +323,6 @@ Page {
                 }
             }
 
-            Item {
-                width: parent.width
-                height: Theme.paddingLarge
-            }
-
             Component {
                 id: folderPickerDialog
                 FolderPickerDialog {
@@ -350,39 +345,56 @@ Page {
                 }
             }
 
-            Button {
-                text: "Сбросить настройки"
+            Label {
+                text: "Настройки"
                 anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: {
-                    maxIter = 50
-                    depthSlider.value = 50
-                    colorScheme = "Нет"
-                    colorSchemeCombo.currentIndex = 0
-                    centerX = -0.5
-                    centerY = 0
-                    zoom = 1.0
-                    xCenterField.text = "-0.5"
-                    yCenterField.text = "0"
-                    zoomField.text = "1.0"
-
-                    console.log("Настройки сброшены")
-
-                    if (autoUpdate) canvas.requestPaint()
-                }
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeLarge
             }
-            Button {
-                text: "Загрузить все настройки"
-                onClicked: {
-                    loadSettings()
-                    console.log("Настройки загружены")
-                    canvas.requestPaint()
+
+            RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width - 2*Theme.horizontalPageMargin
+                spacing: Theme.paddingMedium
+
+                Button {
+                    text: "Сбросить"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        maxIter = 50
+                        depthSlider.value = 50
+                        colorScheme = "Нет"
+                        colorSchemeCombo.currentIndex = 0
+                        centerX = -0.5
+                        centerY = 0
+                        zoom = 1.0
+                        xCenterField.text = "-0.5"
+                        yCenterField.text = "0"
+                        zoomField.text = "1.0"
+
+                        console.log("Настройки сброшены")
+
+                        if (autoUpdate) canvas.requestPaint()
+                    }
                 }
-            }
-            Button {
-                text: "Сохранить все настройки"
-                onClicked: {
-                    saveAllSettings()
-                    console.log("Настройки сохранены")
+
+                Button {
+                    text: "Загрузить"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        loadSettings()
+                        console.log("Настройки загружены")
+                        canvas.requestPaint()
+                    }
+                }
+
+                Button {
+                    text: "Сохранить"
+                    Layout.fillWidth: true
+                    onClicked: {
+                        saveAllSettings()
+                        console.log("Настройки сохранены")
+                    }
                 }
             }
         }
