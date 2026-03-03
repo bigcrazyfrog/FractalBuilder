@@ -53,16 +53,15 @@ Page {
                 onLinkActivated: Qt.openUrlExternally(link)
             }
 
-            // Кнопка перехода к построению
-            Button {
-                text: "Построить фрактал"
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: pageStack.push(Qt.resolvedUrl("Mandelbrot.qml"))
-            }
-
             Item {
                 width: parent.width
                 height: Theme.paddingLarge
+            }
+
+            Button {
+                text: "Построить фрактал"
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: pageStack.pop()
             }
         }
     }

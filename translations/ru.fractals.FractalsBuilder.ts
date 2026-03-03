@@ -12,7 +12,7 @@
 <context>
     <name>MainPage</name>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="19"/>
+        <location filename="../qml/pages/MainPage.qml" line="66"/>
         <source>FractalsBuilder</source>
         <translation>FractalsBuilder</translation>
     </message>
