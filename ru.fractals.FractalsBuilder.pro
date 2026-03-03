@@ -11,7 +11,6 @@ SOURCES += \
 HEADERS += \
 
 DISTFILES += \
-    qml/pages/BasePage.qml \
     qml/pages/Mandelbrot.qml \
     qml/pages/fractals/Julia.qml \
     qml/pages/fractals/js/db.js \
